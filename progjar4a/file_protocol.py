@@ -7,10 +7,8 @@ from file_interface import FileInterface
 * class FileProtocol bertugas untuk memproses 
 data yang masuk, dan menerjemahkannya apakah sesuai dengan
 protokol/aturan yang dibuat
-
 * data yang masuk dari client adalah dalam bentuk bytes yang 
 pada akhirnya akan diproses dalam bentuk string
-
 * class FileProtocol akan memproses data yang masuk dalam bentuk
 string
 """
