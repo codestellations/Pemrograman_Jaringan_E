@@ -11,12 +11,23 @@ def get_url_list():
     urls['anjing']='https://loremflickr.com/320/240/puppy'
     urls['burung']='https://loremflickr.com/320/240/bird'
     urls['bebek']='https://loremflickr.com/320/240/duckling'
+
     return urls
 
-def download_gambar(url=None,tuliskefile=False, namabaru="Image"):
+def get_gambar_list():
+    gambar = dict()
+    gambar['kucing'] = 'files/kucing_1.jpg'
+    gambar['anjing'] = 'files/anjing_1.jpg'
+    gambar['burung'] = 'files/burung_1.jpg'
+    gambar['bebek'] = 'files/bebek_1.jpg'
+
+    return gambar
+
+def download_gambar(url=None, tuliskefile=True, namabaru="Image"):
     global counter
 
     waktu_awal = datetime.datetime.now()
+
     if (url is None):
         return False
 
@@ -32,7 +43,7 @@ def download_gambar(url=None,tuliskefile=False, namabaru="Image"):
     logging.warning(content_type)
     if (content_type in list(tipe.keys())):
         ekstensi = tipe[content_type]
-        namafile = "files" + "\\" + namabaru + "_" + str(counter) + "." + ekstensi
+        namafile = "files" + "/" + namabaru + "_" + str(counter) + "." + ekstensi
 
         # jika folder belum dibuat
         if not os.path.exists('files'):
@@ -41,7 +52,7 @@ def download_gambar(url=None,tuliskefile=False, namabaru="Image"):
         # jika nama file sudah ada, nama file increment
         while os.path.exists(namafile):
             counter += 1
-            namafile = "files" + "\\" + namabaru + "_" + str(counter) + "." + ekstensi
+            namafile = "files" + "/" + namabaru + "_" + str(counter) + "." + ekstensi
 
         if (tuliskefile):
             fp = open(f"{namafile}","wb")

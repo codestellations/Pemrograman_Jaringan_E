@@ -1,25 +1,58 @@
-from library import download_gambar, get_url_list
-import time
+from library import get_gambar_list
 import datetime
 import concurrent.futures
+import logging
+import socket
 
-def download_semua():
+TARGET_IP = '255.255.255.255'
+TARGET_PORT = 5005
+
+sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+sock.setsockopt(socket.SOL_SOCKET, socket.SO_BROADCAST, 1)
+
+
+def kirim_gambar(namafile=None):
+    waktu_awal = datetime.datetime.now()
+
+    if (namafile is None):
+        return False
+
+    fp = open(namafile, 'rb')
+    k = fp.read()
+
+    terkirim = 0
+
+    for x in k:
+        k_bytes = bytes([x])
+        sock.sendto(k_bytes, (TARGET_IP, TARGET_PORT))
+        terkirim = terkirim + 1
+
+    print("terkirim ", namafile)
+    fp.close()
+
+    waktu_process = datetime.datetime.now() - waktu_awal
+    waktu_akhir = datetime.datetime.now()
+    logging.warning(f"sending {namafile} dalam waktu {waktu_process} {waktu_awal} s/d {waktu_akhir}")
+
+    return waktu_process
+
+
+def kirim_semua():
     texec = dict()
-    urls = get_url_list()
+    gambar = get_gambar_list()
     status_task = dict()
     task = concurrent.futures.ThreadPoolExecutor(max_workers=4)
     catat_awal = datetime.datetime.now()
 
-    for k in urls:
-        print(f"mendownload {urls[k]}")
-        waktu = time.time()
+    for k in gambar:
+        print(f"mengirim {gambar[k]}")
 
-        #bagian ini merupakan bagian yang mengistruksikan eksekusi fungsi download gambar secara multithread
-        texec[k] = task.submit(download_gambar, urls[k], True, k)
+        # bagian ini merupakan bagian yang mengistruksikan eksekusi fungsi download gambar secara multithread
+        texec[k] = task.submit(kirim_gambar, gambar[k],)
 
-    #setelah menyelesaikan tugasnya, dikembalikan ke main thread dengan memanggil result
-    for k in urls:
-        status_task[k]=texec[k].result()
+    # setelah menyelesaikan tugasnya, dikembalikan ke main thread dengan memanggil result
+    for k in gambar:
+        status_task[k] = texec[k].result()
 
     catat_akhir = datetime.datetime.now()
     selesai = catat_akhir - catat_awal
@@ -28,7 +61,7 @@ def download_semua():
     print(status_task)
 
 
-#fungsi download_gambar akan dijalankan secara multithreading
-
-if __name__=='__main__':
-    download_semua()
+# fungsi kirim_gambar akan dijalankan secara multi process
+if __name__ == '__main__':
+    # download_semua()
+    kirim_semua()
