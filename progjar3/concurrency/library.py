@@ -46,9 +46,6 @@ def download_gambar(url=None,tuliskefile=False):
     else:
         return False
 
-
-
-
 if __name__=='__main__':
     #check fungsi
     k = download_gambar('https://asset.kompas.com/crops/qz_jJxyaZgGgboomdCEXsfbSpec=/0x0:998x665/740x500/data/photo/2020/03/01/5e5b52f4db896.jpg')

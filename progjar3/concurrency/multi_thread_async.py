@@ -12,6 +12,7 @@ def download_semua():
     status_task = dict()
     task = concurrent.futures.ThreadPoolExecutor(max_workers=4)
     catat_awal = datetime.datetime.now()
+
     for k in urls:
         print(f"mendownload {urls[k]}")
         waktu = time.time()
